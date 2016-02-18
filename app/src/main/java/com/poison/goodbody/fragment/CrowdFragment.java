@@ -9,15 +9,15 @@ import android.view.ViewGroup;
 import com.poison.goodbody.R;
 
 /**
- * 焦点
- * Created by Mr.H on 2016/2/18.
+ * 人群
+ * Created by Administrator on 2016/2/18.
  */
-public class FousFragment extends Fragment
+public class CrowdFragment extends Fragment
 {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_focus_layout, null);
+        View view = inflater.inflate(R.layout.fragment_crowd_layout, null);
         return view;
     }
 }

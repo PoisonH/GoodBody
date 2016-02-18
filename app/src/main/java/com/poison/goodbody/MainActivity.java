@@ -2,6 +2,7 @@ package com.poison.goodbody;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,6 +12,16 @@ import android.util.TypedValue;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.poison.goodbody.adapter.ViewPagerAdapter;
+import com.poison.goodbody.fragment.BothSexesFragment;
+import com.poison.goodbody.fragment.CrowdFragment;
+import com.poison.goodbody.fragment.DietFragment;
+import com.poison.goodbody.fragment.DoctorFragment;
+import com.poison.goodbody.fragment.ExerciseFragment;
+import com.poison.goodbody.fragment.FousFragment;
+import com.poison.goodbody.fragment.SeasonFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener
 {
@@ -19,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private PagerSlidingTabStrip mPagerSlidingTabStrip;
     private ViewPager mViewPager;
-
+    private List<Fragment> mListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -27,8 +38,22 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mListFragment = new ArrayList<>();
+        initFragment();
         initView();
         initToolbar();
+    }
+
+    private void initFragment()
+    {
+        mListFragment.add(new FousFragment());
+        mListFragment.add(new SeasonFragment());
+        mListFragment.add(new ExerciseFragment());
+        mListFragment.add(new CrowdFragment());
+        mListFragment.add(new DietFragment());
+        mListFragment.add(new DoctorFragment());
+        mListFragment.add(new BothSexesFragment());
+
     }
 
     private void initView()
@@ -40,10 +65,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     }
 
-
     private void initToolbar()
     {
-        //mToolbar.setTitle("好身体");
         setSupportActionBar(mToolbar);
         //给左上角加上一个返回的图标
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -51,12 +74,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mActionBarDrawerToggle.syncState();
         mActionBarDrawerToggle.onOptionsItemSelected(null);
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
-        mViewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
+        mViewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), mListFragment));
         mPagerSlidingTabStrip.setViewPager(mViewPager);
         mViewPager.setCurrentItem(0);
         mPagerSlidingTabStrip.setOnPageChangeListener(this);
         initTabsValue();
     }
+
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
