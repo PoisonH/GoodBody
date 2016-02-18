@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 public class MainActivity extends AppCompatActivity
 {
     private Toolbar mToolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
