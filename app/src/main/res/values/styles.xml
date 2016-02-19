@@ -1,12 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-    </style>
-
-    <!-- myself application theme. -->
-    <style name="MyAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/background_window</item>
         <!-- ...and here we setting appcompat’s color theming attrs -->

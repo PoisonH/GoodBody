@@ -93,17 +93,17 @@ public class MainActivity extends AppCompatActivity
         //设置tab上title的字体大小（px）
         mPagerSlidingTabStrip.setTextSize((int) (DensityUtils.dp2px(this, 12)));
         // 底部游标颜色
-        mPagerSlidingTabStrip.setIndicatorColor(Color.BLUE);
+        mPagerSlidingTabStrip.setIndicatorColor(Color.YELLOW);
         // tab的分割线颜色
         mPagerSlidingTabStrip.setDividerColor(Color.TRANSPARENT);
         // tab背景
-        mPagerSlidingTabStrip.setBackgroundColor(Color.parseColor("#4876FF"));
+        mPagerSlidingTabStrip.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
         // tab底线高度
         mPagerSlidingTabStrip.setUnderlineHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()));
         // 游标高度
         mPagerSlidingTabStrip.setIndicatorHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()));
         //设置选中的颜色
-        mPagerSlidingTabStrip.setSelectedTextColor(Color.WHITE);
+        mPagerSlidingTabStrip.setSelectedTextColor(Color.YELLOW);
         // 正常文字颜色
         mPagerSlidingTabStrip.setTextColor(Color.BLACK);
     }
