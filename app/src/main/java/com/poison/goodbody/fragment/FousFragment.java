@@ -10,7 +10,7 @@ import com.poison.goodbody.R;
 
 /**
  * 焦点
- * Created by Mr.H on 2016/2/18.
+ * Created by PoisonH on 2016/2/18.
  */
 public class FousFragment extends Fragment
 {

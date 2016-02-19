@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 
-import com.astuetz.PagerSlidingTabStrip;
 import com.poison.goodbody.adapter.ViewPagerAdapter;
 import com.poison.goodbody.fragment.BothSexesFragment;
 import com.poison.goodbody.fragment.CrowdFragment;
@@ -19,11 +18,16 @@ import com.poison.goodbody.fragment.DoctorFragment;
 import com.poison.goodbody.fragment.ExerciseFragment;
 import com.poison.goodbody.fragment.FousFragment;
 import com.poison.goodbody.fragment.SeasonFragment;
+import com.poison.goodbody.utils.DensityUtils;
+import com.poison.goodbody.widget.PagerSlidingTabStrip;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener
+/**
+ * Created by PoisonH on 2016/2/19.
+ */
+public class MainActivity extends AppCompatActivity
 {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -67,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private void initToolbar()
     {
+        mToolbar.setBackgroundResource(R.color.colorPrimaryDark);
         setSupportActionBar(mToolbar);
         //给左上角加上一个返回的图标
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,27 +82,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mViewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), mListFragment));
         mPagerSlidingTabStrip.setViewPager(mViewPager);
         mViewPager.setCurrentItem(0);
-        mPagerSlidingTabStrip.setOnPageChangeListener(this);
         initTabsValue();
-    }
-
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
-    {
-
-    }
-
-    @Override
-    public void onPageSelected(int position)
-    {
-
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state)
-    {
-
     }
 
     /**
@@ -105,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
      */
     private void initTabsValue()
     {
+        //设置tab上title的字体大小（px）
+        mPagerSlidingTabStrip.setTextSize((int) (DensityUtils.dp2px(this, 12)));
         // 底部游标颜色
         mPagerSlidingTabStrip.setIndicatorColor(Color.BLUE);
         // tab的分割线颜色
@@ -115,8 +102,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mPagerSlidingTabStrip.setUnderlineHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()));
         // 游标高度
         mPagerSlidingTabStrip.setIndicatorHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()));
+        //设置选中的颜色
+        mPagerSlidingTabStrip.setSelectedTextColor(Color.WHITE);
         // 正常文字颜色
         mPagerSlidingTabStrip.setTextColor(Color.BLACK);
-
     }
 }

@@ -10,7 +10,7 @@ import com.poison.goodbody.R;
 
 /**
  * 时令
- * Created by Administrator on 2016/2/18.
+ * Created by PoisonH on 2016/2/18.
  */
 public class SeasonFragment extends Fragment
 {

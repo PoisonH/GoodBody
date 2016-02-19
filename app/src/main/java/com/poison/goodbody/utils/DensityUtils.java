@@ -2,7 +2,7 @@ package com.poison.goodbody.utils;
 
 /**
  * * 常用单位转换的辅助类
- * Created by Mr.H on 2016/2/19.
+ * Created by PoisonH on 2016/2/19.
  */
 
 import android.content.Context;
