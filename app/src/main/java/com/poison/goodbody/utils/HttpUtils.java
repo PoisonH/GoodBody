@@ -1,42 +1,66 @@
 package com.poison.goodbody.utils;
 
-import java.io.IOException;
+import android.content.Context;
+import android.util.Log;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.poison.goodbody.model.DataListEntity;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by PoisonH on 2016/2/19.
  */
 public class HttpUtils
 {
-    private static String mStrUrl = "http://www.ys137.com/api.php?act=getlist&catid=";
-    private static String mStrUrl_ = "&page=1&pagesize=20";
-    private static String mStrData;
+    private static String url = "http://www.ys137.com/api.php?act=getlist&catid=0&page=1&pagesize=5";
+    private static String data;
 
-    public static String getData(int catid)
+    public static List<DataListEntity> getData(int catid, Context context)
     {
-        OkHttpClient mOkHttpClient = new OkHttpClient();
-        final Request mRequest = new Request.Builder().url(mStrUrl + catid + mStrUrl_).build();
-        Call mCall = mOkHttpClient.newCall(mRequest);
-        mCall.enqueue(new Callback()
+        RequestQueue mQueue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response)
+                    {
+                        Log.d("TAG", response);
+                        data = response.toString();
+                    }
+                }, new Response.ErrorListener()
         {
             @Override
-            public void onFailure(Call call, IOException e)
+            public void onErrorResponse(VolleyError error)
             {
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException
-            {
-                mStrData = response.body().string();
+                Log.e("TAG", error.getMessage(), error);
             }
         });
-
-        return mStrData;
+        mQueue.add(stringRequest);
+        return parseJson(data);
     }
+
+    private static List<DataListEntity> parseJson(String str)
+    {
+        List<DataListEntity> mList = new ArrayList<>();
+        try
+        {
+
+        } catch (Exception e)
+        {
+
+        }
+        return mList;
+    }
+
 
 }
