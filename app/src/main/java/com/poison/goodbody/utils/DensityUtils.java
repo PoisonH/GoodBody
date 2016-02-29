@@ -66,5 +66,7 @@ public class DensityUtils
         return (pxVal / context.getResources().getDisplayMetrics().scaledDensity);
     }
 
+
+
 }
 

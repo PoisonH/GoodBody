@@ -34,30 +34,14 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private PagerSlidingTabStrip mPagerSlidingTabStrip;
     private ViewPager mViewPager;
-    private List<Fragment> mListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mListFragment = new ArrayList<>();
-        initFragment();
         initView();
         initToolbar();
-    }
-
-    private void initFragment()
-    {
-        mListFragment.add(new FousFragment());
-        mListFragment.add(new SeasonFragment());
-        mListFragment.add(new ExerciseFragment());
-        mListFragment.add(new CrowdFragment());
-        mListFragment.add(new DietFragment());
-        mListFragment.add(new DoctorFragment());
-        mListFragment.add(new BothSexesFragment());
-
     }
 
     private void initView()
@@ -79,9 +63,11 @@ public class MainActivity extends AppCompatActivity
         mActionBarDrawerToggle.syncState();
         mActionBarDrawerToggle.onOptionsItemSelected(null);
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
-        mViewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), mListFragment));
+
+        mViewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), MainActivity.this.getApplicationContext()));
         mPagerSlidingTabStrip.setViewPager(mViewPager);
         mViewPager.setCurrentItem(0);
+
         initTabsValue();
     }
 
