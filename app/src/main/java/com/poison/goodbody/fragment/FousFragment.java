@@ -1,5 +1,6 @@
 package com.poison.goodbody.fragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,15 +29,16 @@ import java.util.List;
  */
 public class FousFragment extends Fragment implements DataView, SwipeRefreshLayout.OnRefreshListener
 {
-    //  private ConvenientBanner mConvenientBanner;
+    private ConvenientBanner mConvenientBanner;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private ListDataRVAdapter mRVAdapter;
     private LinearLayoutManager manager;
     private IPresenter mPresenter;
     private ArrayList<DataList> mList;
-
     public static int pageIndex;
+    ProgressDialog mDialog;
+    private boolean isFirst = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -50,6 +52,7 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
     {
         View view = inflater.inflate(R.layout.fragment_focus_layout, null);
         initView(view);
+        mDialog = ProgressDialog.show(getActivity(), "正在加载", "loading.........");
         onRefresh();
         return view;
     }
@@ -57,7 +60,7 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
 
     private void initView(View view)
     {
-        // mConvenientBanner = (ConvenientBanner) view.findViewById(R.id.cb_banner);
+        mConvenientBanner = (ConvenientBanner) view.findViewById(R.id.cb_banner);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_swiperefreshlayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.primary_dark, R.color.primary_light, R.color.accent);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -68,6 +71,7 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
         mRVAdapter = new ListDataRVAdapter(getActivity());
         mRecyclerView.setAdapter(mRVAdapter);
         mRecyclerView.addOnScrollListener(mOnScrollListener);
+        //显示刷新进度条
 
     }
 
@@ -121,7 +125,12 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
         mList.addAll(lists);
         if (0 == pageIndex)
         {
+            if (mDialog.isShowing() && mDialog != null)
+            {
+                mDialog.dismiss();
+            }
             mRVAdapter.setData(lists);
+            isFirst = true;
         } else
         {
             //如果没有更多数据了,则隐藏footer布局
@@ -129,6 +138,7 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
             {
                 mRVAdapter.isShowFooter(false);
             }
+            mRVAdapter.setData(lists);
             mRVAdapter.notifyDataSetChanged();
         }
         pageIndex += 1;
@@ -149,5 +159,15 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
             mList.clear();
         }
         mPresenter.loadDataList(0, pageIndex);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser)
+    {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isFirst)
+        {
+            onRefresh();
+        }
     }
 }

@@ -1,12 +1,14 @@
 package com.poison.goodbody.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.poison.goodbody.R;
 import com.poison.goodbody.bean.DataList;
 
@@ -39,7 +41,11 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<ListDataRVAdapter.Re
     @Override
     public void onBindViewHolder(RecyclerHolder holder, int position)
     {
-        holder.mTv.setText(mList.get(position).getTitle());
+        Uri mPicUri = Uri.parse(mList.get(position).getPicurl());
+        holder.sdv_imageview.setImageURI(mPicUri);
+        holder.tv_title.setText(mList.get(position).getTitle());
+        holder.tv_description.setText(mList.get(position).getDescription());
+        holder.tv_pubDate.setText(mList.get(position).getPubdate());
     }
 
     @Override
@@ -51,12 +57,18 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<ListDataRVAdapter.Re
 
     public static class RecyclerHolder extends RecyclerView.ViewHolder
     {
-        private TextView mTv;
+        public SimpleDraweeView sdv_imageview;
+        public TextView tv_title;
+        public TextView tv_description;
+        public TextView tv_pubDate;
 
         public RecyclerHolder(View view)
         {
             super(view);
-            mTv = (TextView) view.findViewById(R.id.tv);
+            sdv_imageview = (SimpleDraweeView) itemView.findViewById(R.id.sdv_imageview);
+            tv_title = (TextView) itemView.findViewById(R.id.tv_title);
+            tv_description = (TextView) itemView.findViewById(R.id.tv_description);
+            tv_pubDate = (TextView) itemView.findViewById(R.id.tv_pubDate);
         }
     }
 
