@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.poison.goodbody.R;
-import com.poison.goodbody.bean.DataListEntity;
+import com.poison.goodbody.bean.DataList;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<ListDataRVAdapter.Re
 {
 
     private Context mContext;
-    private List<DataListEntity> mList;
+    private List<DataList> mList;
 
     private boolean mShowFooter = true;
     private static final int TYPE_ITEM = 0;
@@ -39,6 +39,7 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<ListDataRVAdapter.Re
     @Override
     public void onBindViewHolder(RecyclerHolder holder, int position)
     {
+        holder.mTv.setText(mList.get(position).getTitle());
     }
 
     @Override
@@ -88,7 +89,7 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<ListDataRVAdapter.Re
         }
     }
 
-    public void setData(List<DataListEntity> lists)
+    public void setData(List<DataList> lists)
     {
         this.mList = lists;
         this.notifyDataSetChanged();

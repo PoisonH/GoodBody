@@ -1,7 +1,6 @@
 package com.poison.goodbody.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,10 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.poison.goodbody.R;
 import com.poison.goodbody.adapter.ListDataRVAdapter;
+import com.poison.goodbody.bean.DataList;
 import com.poison.goodbody.bean.DataListEntity;
 import com.poison.goodbody.presenter.IPresenter;
 import com.poison.goodbody.presenter.PresenterImpl;
@@ -27,15 +28,15 @@ import java.util.List;
  */
 public class FousFragment extends Fragment implements DataView, SwipeRefreshLayout.OnRefreshListener
 {
-    private ConvenientBanner mConvenientBanner;
+    //  private ConvenientBanner mConvenientBanner;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private ListDataRVAdapter mRVAdapter;
     private LinearLayoutManager manager;
     private IPresenter mPresenter;
-    private ArrayList<DataListEntity> mList;
+    private ArrayList<DataList> mList;
 
-    private int pageIndex;
+    public static int pageIndex;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -49,14 +50,16 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
     {
         View view = inflater.inflate(R.layout.fragment_focus_layout, null);
         initView(view);
+        onRefresh();
         return view;
     }
 
 
     private void initView(View view)
     {
-        mConvenientBanner = (ConvenientBanner) view.findViewById(R.id.cb_banner);
+        // mConvenientBanner = (ConvenientBanner) view.findViewById(R.id.cb_banner);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_swiperefreshlayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.primary_dark, R.color.primary_light, R.color.accent);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_recyclerview);
         manager = new LinearLayoutManager(getActivity());
@@ -108,7 +111,7 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
     }
 
     @Override
-    public void addListData(List<DataListEntity> lists)
+    public void addListData(List<DataList> lists)
     {
         mRVAdapter.isShowFooter(true);
         if (null == mList)
@@ -116,7 +119,7 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
             mList = new ArrayList<>();
         }
         mList.addAll(lists);
-        if (1 == pageIndex)
+        if (0 == pageIndex)
         {
             mRVAdapter.setData(lists);
         } else
@@ -134,7 +137,7 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
     @Override
     public void showLoadFailMsg()
     {
-
+        Toast.makeText(getActivity(), "加载数据失败", Toast.LENGTH_SHORT).show();
     }
 
     @Override

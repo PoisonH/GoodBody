@@ -1,5 +1,6 @@
 package com.poison.goodbody.view;
 
+import com.poison.goodbody.bean.DataList;
 import com.poison.goodbody.bean.DataListEntity;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface DataView
     void hideProgress();
 
     //添加数据
-    void addListData(List<DataListEntity> lists);
+    void addListData(List<DataList> lists);
 
     //显示加载失败显示
     void showLoadFailMsg();

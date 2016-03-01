@@ -1,5 +1,6 @@
 package com.poison.goodbody.presenter;
 
+import com.poison.goodbody.bean.DataList;
 import com.poison.goodbody.bean.DataListEntity;
 import com.poison.goodbody.model.IListDataModel;
 import com.poison.goodbody.model.ListDataModelImpl;
@@ -41,7 +42,7 @@ public class PresenterImpl implements IPresenter, ListDataModelImpl.OnLoadDataLi
     }
 
     @Override
-    public void onSuccess(List<DataListEntity> list)
+    public void onSuccess(List<DataList> list)
     {
         mDataView.hideProgress();
         mDataView.addListData(list);
