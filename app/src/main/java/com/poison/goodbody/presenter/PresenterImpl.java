@@ -2,11 +2,13 @@ package com.poison.goodbody.presenter;
 
 import com.poison.goodbody.bean.DataList;
 import com.poison.goodbody.bean.DataListEntity;
+import com.poison.goodbody.fragment.FousFragment;
 import com.poison.goodbody.model.IListDataModel;
 import com.poison.goodbody.model.ListDataModelImpl;
 import com.poison.goodbody.utils.Constant;
 import com.poison.goodbody.view.DataView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +18,7 @@ public class PresenterImpl implements IPresenter, ListDataModelImpl.OnLoadDataLi
 {
     private DataView mDataView;
     private IListDataModel mListDataModel;
+    private List<DataList> mList;
 
     public PresenterImpl(DataView dataView)
     {
@@ -37,7 +40,7 @@ public class PresenterImpl implements IPresenter, ListDataModelImpl.OnLoadDataLi
 
     private String getUrl(int catid, int page)
     {
-        String str = Constant.URL + catid + "&page=" + page + "&pagesize=20";
+        String str = Constant.URL + catid + "&page=" + page + "&pagesize=1";
         return str;
     }
 
@@ -45,7 +48,20 @@ public class PresenterImpl implements IPresenter, ListDataModelImpl.OnLoadDataLi
     public void onSuccess(List<DataList> list)
     {
         mDataView.hideProgress();
-        mDataView.addListData(list);
+        if (null == mList)
+        {
+            mList = new ArrayList<>();
+            mList.addAll(list);
+        } else
+        {
+            mList.addAll(mList.size(), list);
+        }
+        if (FousFragment.isRefresh)
+        {
+            mList.clear();
+            mList.addAll(list);
+        }
+        mDataView.addListData(mList);
     }
 
     @Override

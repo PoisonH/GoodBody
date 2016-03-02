@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by PoisonH on 2016/2/26.
  */
-public class ListDataRVAdapter extends RecyclerView.Adapter<ListDataRVAdapter.RecyclerHolder>
+public class ListDataRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
 
     private Context mContext;
@@ -35,24 +35,46 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<ListDataRVAdapter.Re
     @Override
     public int getItemCount()
     {
-        return mList == null ? 0 : mList.size();
+        int begin = mShowFooter ? 1 : 0;
+        if (mList == null)
+        {
+            return begin;
+        }
+        return mList.size() + begin;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerHolder holder, int position)
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
     {
-        Uri mPicUri = Uri.parse(mList.get(position).getPicurl());
-        holder.sdv_imageview.setImageURI(mPicUri);
-        holder.tv_title.setText(mList.get(position).getTitle());
-        holder.tv_description.setText(mList.get(position).getDescription());
-        holder.tv_pubDate.setText(mList.get(position).getPubdate());
+        if (holder instanceof RecyclerHolder)
+        {
+            DataList mDataList = mList.get(position);
+            if (null == mDataList)
+            {
+                return;
+            }
+            Uri mPicUri = Uri.parse(mList.get(position).getPicurl());
+            ((RecyclerHolder) holder).sdv_imageview.setImageURI(mPicUri);
+            ((RecyclerHolder) holder).tv_title.setText(mList.get(position).getTitle());
+            ((RecyclerHolder) holder).tv_description.setText(mList.get(position).getDescription());
+            ((RecyclerHolder) holder).tv_pubDate.setText(mList.get(position).getPubdate());
+        }
     }
 
     @Override
-    public RecyclerHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.rv_item_layout, null);
-        return new RecyclerHolder(view);
+
+        if (viewType == TYPE_ITEM)
+        {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.rv_item_layout, null);
+            return new RecyclerHolder(view);
+        } else
+        {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_footer_layout, null);
+            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            return new FooterViewHolder(view);
+        }
     }
 
     public static class RecyclerHolder extends RecyclerView.ViewHolder
@@ -105,5 +127,15 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<ListDataRVAdapter.Re
     {
         this.mList = lists;
         this.notifyDataSetChanged();
+    }
+
+    public class FooterViewHolder extends RecyclerView.ViewHolder
+    {
+
+        public FooterViewHolder(View view)
+        {
+            super(view);
+        }
+
     }
 }

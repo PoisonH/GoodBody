@@ -1,6 +1,5 @@
 package com.poison.goodbody.fragment;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,7 +14,6 @@ import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.poison.goodbody.R;
 import com.poison.goodbody.adapter.ListDataRVAdapter;
 import com.poison.goodbody.bean.DataList;
-import com.poison.goodbody.bean.DataListEntity;
 import com.poison.goodbody.presenter.IPresenter;
 import com.poison.goodbody.presenter.PresenterImpl;
 import com.poison.goodbody.view.DataView;
@@ -35,10 +33,10 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
     private ListDataRVAdapter mRVAdapter;
     private LinearLayoutManager manager;
     private IPresenter mPresenter;
-    private ArrayList<DataList> mList;
-    public static int pageIndex;
-    ProgressDialog mDialog;
+    private static ArrayList<DataList> mList;
+    private int pageIndex;
     private boolean isFirst = false;
+    public static boolean isRefresh = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -52,11 +50,9 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
     {
         View view = inflater.inflate(R.layout.fragment_focus_layout, null);
         initView(view);
-        mDialog = ProgressDialog.show(getActivity(), "正在加载", "loading.........");
         onRefresh();
         return view;
     }
-
 
     private void initView(View view)
     {
@@ -71,8 +67,6 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
         mRVAdapter = new ListDataRVAdapter(getActivity());
         mRecyclerView.setAdapter(mRVAdapter);
         mRecyclerView.addOnScrollListener(mOnScrollListener);
-        //显示刷新进度条
-
     }
 
     private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener()
@@ -94,6 +88,7 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
             super.onScrollStateChanged(recyclerView, newState);
             if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == mRVAdapter.getItemCount() && mRVAdapter.isShowFooter())
             {
+                isRefresh = false;
                 mPresenter.loadDataList(0, pageIndex);
             }
         }
@@ -122,14 +117,14 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
         {
             mList = new ArrayList<>();
         }
-        mList.addAll(lists);
-        if (0 == pageIndex)
+        if (mList.size() != 0)
         {
-            if (mDialog.isShowing() && mDialog != null)
-            {
-                mDialog.dismiss();
-            }
-            mRVAdapter.setData(lists);
+            mList.clear();
+        }
+        mList.addAll(lists);
+        if (1 == pageIndex)
+        {
+            mRVAdapter.setData(mList);
             isFirst = true;
         } else
         {
@@ -138,7 +133,7 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
             {
                 mRVAdapter.isShowFooter(false);
             }
-            mRVAdapter.setData(lists);
+            mRVAdapter.setData(mList);
             mRVAdapter.notifyDataSetChanged();
         }
         pageIndex += 1;
@@ -153,10 +148,12 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
     @Override
     public void onRefresh()
     {
-        pageIndex = 0;
+        isRefresh = true;
+        pageIndex = 1;
         if (mList != null)
         {
             mList.clear();
+            mRVAdapter.notifyDataSetChanged();
         }
         mPresenter.loadDataList(0, pageIndex);
     }

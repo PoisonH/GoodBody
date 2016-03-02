@@ -29,10 +29,9 @@ public class GsonUtils
         String typename;
 
         DataListEntity mEntity = mGson.fromJson(str, DataListEntity.class);
-
-        for (int i = 0; i < 5; i++)
+        if (null != mEntity.getData().getAd_data())
         {
-            if (null != mEntity.getData().getAd_data())
+            for (int i = 0; i < mEntity.getData().getAd_data().size(); i++)
             {
                 mDataList = new DataList();
                 id = mEntity.getData().getAd_data().get(i).getId();
@@ -56,7 +55,7 @@ public class GsonUtils
                 mList.add(mDataList);
             }
         }
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < mEntity.getData().getArticle_list().size(); i++)
         {
             mDataList = new DataList();
             id = mEntity.getData().getArticle_list().get(i).getId();
@@ -79,8 +78,6 @@ public class GsonUtils
 
             mList.add(mDataList);
         }
-
-
         return mList;
     }
 }
