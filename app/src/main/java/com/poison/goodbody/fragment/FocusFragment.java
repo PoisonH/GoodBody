@@ -4,13 +4,13 @@ import com.poison.goodbody.fragment.base.BaseFragment;
 import com.poison.goodbody.utils.Constant;
 
 /**
- * 时令
+ * 焦点
  * Created by PoisonH on 2016/2/18.
  */
-public class SeasonFragment extends BaseFragment
+public class FocusFragment extends BaseFragment
 {
-    public SeasonFragment()
+    public FocusFragment()
     {
-        setCatid(Constant.SEASON);
+        setCatid(Constant.FOCUS);
     }
 }

@@ -1,23 +1,16 @@
 package com.poison.goodbody.fragment;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.poison.goodbody.R;
+import com.poison.goodbody.fragment.base.BaseFragment;
+import com.poison.goodbody.utils.Constant;
 
 /**
  * 人群
  * Created by PoisonH on 2016/2/18.
  */
-public class CrowdFragment extends Fragment
+public class CrowdFragment extends BaseFragment
 {
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public CrowdFragment()
     {
-        View view = inflater.inflate(R.layout.fragment_crowd_layout, null);
-        return view;
+        setCatid(Constant.CROWD);
     }
 }

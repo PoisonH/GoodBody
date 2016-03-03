@@ -12,7 +12,7 @@ import com.poison.goodbody.fragment.CrowdFragment;
 import com.poison.goodbody.fragment.DietFragment;
 import com.poison.goodbody.fragment.DoctorFragment;
 import com.poison.goodbody.fragment.ExerciseFragment;
-import com.poison.goodbody.fragment.FousFragment;
+import com.poison.goodbody.fragment.FocusFragment;
 import com.poison.goodbody.fragment.SeasonFragment;
 import com.poison.goodbody.bean.DataListEntity;
 
@@ -86,7 +86,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter
             case 0:
                 if (mFousFragment == null)
                 {
-                    mFousFragment = new FousFragment();
+                    mFousFragment = new FocusFragment();
                     transaction.add(R.id.vp_viewpager, mFousFragment);
                 } else
                 {

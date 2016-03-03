@@ -1,4 +1,4 @@
-package com.poison.goodbody.fragment;
+package com.poison.goodbody.fragment.base;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,7 +25,7 @@ import java.util.List;
  * 焦点
  * Created by PoisonH on 2016/2/18.
  */
-public class FousFragment extends Fragment implements DataView, SwipeRefreshLayout.OnRefreshListener
+public class BaseFragment extends Fragment implements DataView, SwipeRefreshLayout.OnRefreshListener
 {
     private ConvenientBanner mConvenientBanner;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -37,6 +37,7 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
     private int pageIndex;
     private boolean isFirst = false;
     public static boolean isRefresh = false;
+    private int catid;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -89,7 +90,7 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
             if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == mRVAdapter.getItemCount() && mRVAdapter.isShowFooter())
             {
                 isRefresh = false;
-                mPresenter.loadDataList(0, pageIndex);
+                mPresenter.loadDataList(catid, pageIndex);
             }
         }
 
@@ -155,7 +156,7 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
             mList.clear();
             mRVAdapter.notifyDataSetChanged();
         }
-        mPresenter.loadDataList(0, pageIndex);
+        mPresenter.loadDataList(catid, pageIndex);
     }
 
     @Override
@@ -167,4 +168,10 @@ public class FousFragment extends Fragment implements DataView, SwipeRefreshLayo
             onRefresh();
         }
     }
+
+    public void setCatid(int catid)
+    {
+        this.catid = catid;
+    }
 }
+

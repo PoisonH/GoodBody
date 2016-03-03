@@ -2,7 +2,6 @@ package com.poison.goodbody;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,18 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 
 import com.poison.goodbody.adapter.ViewPagerAdapter;
-import com.poison.goodbody.fragment.BothSexesFragment;
-import com.poison.goodbody.fragment.CrowdFragment;
-import com.poison.goodbody.fragment.DietFragment;
-import com.poison.goodbody.fragment.DoctorFragment;
-import com.poison.goodbody.fragment.ExerciseFragment;
-import com.poison.goodbody.fragment.FousFragment;
-import com.poison.goodbody.fragment.SeasonFragment;
 import com.poison.goodbody.utils.DensityUtils;
 import com.poison.goodbody.widget.PagerSlidingTabStrip;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by PoisonH on 2016/2/19.
