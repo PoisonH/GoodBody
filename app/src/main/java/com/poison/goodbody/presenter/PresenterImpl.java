@@ -1,7 +1,7 @@
 package com.poison.goodbody.presenter;
 
 import com.poison.goodbody.bean.DataList;
-import com.poison.goodbody.fragment.FocusFragment;
+import com.poison.goodbody.fragment.ListFragment;
 import com.poison.goodbody.model.IListDataModel;
 import com.poison.goodbody.model.ListDataModelImpl;
 import com.poison.goodbody.utils.Constant;
@@ -39,7 +39,7 @@ public class PresenterImpl implements IPresenter, ListDataModelImpl.OnLoadDataLi
 
     private String getUrl(int catid, int page)
     {
-        String str = Constant.URL + catid + "&page=" + page + "&pagesize=1";
+        String str = Constant.URL + catid + "&page=" + page + "&pagesize=5";
         return str;
     }
 
@@ -55,7 +55,7 @@ public class PresenterImpl implements IPresenter, ListDataModelImpl.OnLoadDataLi
         {
             mList.addAll(mList.size(), list);
         }
-        if (FocusFragment.isRefresh)
+        if (ListFragment.isRefresh)
         {
             mList.clear();
             mList.addAll(list);

@@ -2,6 +2,7 @@ package com.poison.goodbody;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -10,8 +11,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 
 import com.poison.goodbody.adapter.ViewPagerAdapter;
+import com.poison.goodbody.fragment.ListFragment;
+import com.poison.goodbody.utils.Constant;
 import com.poison.goodbody.utils.DensityUtils;
 import com.poison.goodbody.widget.PagerSlidingTabStrip;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by PoisonH on 2016/2/19.
@@ -23,6 +29,7 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private PagerSlidingTabStrip mPagerSlidingTabStrip;
     private ViewPager mViewPager;
+    private List<Fragment> mList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,7 +60,15 @@ public class MainActivity extends AppCompatActivity
         mActionBarDrawerToggle.onOptionsItemSelected(null);
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-        mViewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), MainActivity.this.getApplicationContext()));
+        mList.add(ListFragment.newInstance(Constant.FOCUS));
+        mList.add(ListFragment.newInstance(Constant.SEASON));
+        mList.add(ListFragment.newInstance(Constant.EXERCISE));
+        mList.add(ListFragment.newInstance(Constant.CROWD));
+        mList.add(ListFragment.newInstance(Constant.DIET));
+        mList.add(ListFragment.newInstance(Constant.DOCTOR));
+        mList.add(ListFragment.newInstance(Constant.BOTHSEXES));
+
+        mViewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), MainActivity.this.getApplicationContext(), mList));
         mPagerSlidingTabStrip.setViewPager(mViewPager);
         mViewPager.setCurrentItem(0);
 
