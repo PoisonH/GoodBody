@@ -1,9 +1,11 @@
 package com.poison.goodbody.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by PoisonH on 2016/3/1.
  */
-public class DataList
+public class DataList implements Serializable
 {
     private int id;
     private String title;

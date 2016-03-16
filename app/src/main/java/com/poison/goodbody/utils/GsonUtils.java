@@ -1,5 +1,7 @@
 package com.poison.goodbody.utils;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.poison.goodbody.bean.DataList;
 import com.poison.goodbody.bean.DataListEntity;
@@ -14,6 +16,7 @@ public class GsonUtils
 {
 
     private static Gson mGson = new Gson();
+    private static Context mContext;
 
     public static List<DataList> parseJson(String str)
     {

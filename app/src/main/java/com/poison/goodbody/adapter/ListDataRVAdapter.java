@@ -12,6 +12,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.poison.goodbody.R;
 import com.poison.goodbody.bean.DataList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,24 +24,16 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private Context mContext;
     private List<DataList> mList;
 
-    private boolean mShowFooter = true;
-    private static final int TYPE_ITEM = 0;
-    private static final int TYPE_FOOTER = 1;
-
     public ListDataRVAdapter(Context context)
     {
         this.mContext = context;
+        mList=new ArrayList<>();
     }
 
     @Override
     public int getItemCount()
     {
-        int begin = mShowFooter ? 1 : 0;
-        if (mList == null)
-        {
-            return begin;
-        }
-        return mList.size() + begin;
+        return mList.size();
     }
 
     @Override
@@ -65,16 +58,8 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
 
-        if (viewType == TYPE_ITEM)
-        {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.rv_item_layout, null);
-            return new RecyclerHolder(view);
-        } else
-        {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_footer_layout, null);
-            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            return new FooterViewHolder(view);
-        }
+        View view = LayoutInflater.from(mContext).inflate(R.layout.rv_item_layout, null);
+        return new RecyclerHolder(view);
     }
 
     public static class RecyclerHolder extends RecyclerView.ViewHolder
@@ -94,46 +79,9 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-
-    public boolean isShowFooter()
-    {
-        return this.mShowFooter;
-    }
-
-
-    public void isShowFooter(boolean showFooter)
-    {
-        this.mShowFooter = showFooter;
-    }
-
-    @Override
-    public int getItemViewType(int position)
-    {
-        // 最后一个item设置为footerView
-        if (!mShowFooter)
-        {
-            return TYPE_ITEM;
-        }
-        if (position + 1 == getItemCount())
-        {
-            return TYPE_FOOTER;
-        } else
-        {
-            return TYPE_ITEM;
-        }
-    }
-
     public void setData(List<DataList> lists)
     {
-        this.mList = lists;
+        mList.addAll(mList.size(), lists);
         this.notifyDataSetChanged();
-    }
-
-    public class FooterViewHolder extends RecyclerView.ViewHolder
-    {
-        public FooterViewHolder(View view)
-        {
-            super(view);
-        }
     }
 }

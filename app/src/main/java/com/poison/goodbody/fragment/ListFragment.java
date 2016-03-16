@@ -1,10 +1,9 @@
 package com.poison.goodbody.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,38 +15,33 @@ import com.poison.goodbody.adapter.ListDataRVAdapter;
 import com.poison.goodbody.bean.DataList;
 import com.poison.goodbody.presenter.IPresenter;
 import com.poison.goodbody.presenter.PresenterImpl;
+import com.poison.goodbody.utils.CacheManager;
 import com.poison.goodbody.view.DataView;
+import com.poison.goodbody.widget.PullLoadMoreRecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 焦点
  * Created by PoisonH on 2016/2/18.
  */
-public class ListFragment extends Fragment implements DataView, SwipeRefreshLayout.OnRefreshListener
+public class ListFragment extends Fragment implements DataView
 {
     private ConvenientBanner mConvenientBanner;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mRecyclerView;
+    private PullLoadMoreRecyclerView mPullLoadMoreRecyclerView;
     private ListDataRVAdapter mRVAdapter;
-    private LinearLayoutManager manager;
     private IPresenter mPresenter;
-    private static ArrayList<DataList> mList;
+    private static List<DataList> mList;
     private int pageIndex;
-    private boolean isFirst = false;
-    public static boolean isRefresh = false;
+    //类别
     private int catid;
-
 
     public static ListFragment newInstance(int catid)
     {
         ListFragment fragment = new ListFragment();
-
         Bundle args = new Bundle();
         args.putInt("catid", catid);
         fragment.setArguments(args);
-
         return fragment;
     }
 
@@ -62,93 +56,49 @@ public class ListFragment extends Fragment implements DataView, SwipeRefreshLayo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_focus_layout, null);
-        initView(view);
-        onRefresh();
-        return view;
+        return inflater.inflate(R.layout.fragment_focus_layout, null);
     }
 
-    private void initView(View view)
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState)
     {
+        super.onViewCreated(view, savedInstanceState);
         mConvenientBanner = (ConvenientBanner) view.findViewById(R.id.cb_banner);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_swiperefreshlayout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.primary_dark, R.color.primary_light, R.color.accent);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_recyclerview);
-        manager = new LinearLayoutManager(getActivity());
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(manager);
+        mPullLoadMoreRecyclerView = (PullLoadMoreRecyclerView) view.findViewById(R.id.rv_recyclerview);
+        //设置上拉刷新文字
+        mPullLoadMoreRecyclerView.setFooterViewText("Loading Data...");
+        mPullLoadMoreRecyclerView.setLinearLayout();
         mRVAdapter = new ListDataRVAdapter(getActivity());
-        mRecyclerView.setAdapter(mRVAdapter);
-        mRecyclerView.addOnScrollListener(mOnScrollListener);
+        mPullLoadMoreRecyclerView.setAdapter(mRVAdapter);
+        mPullLoadMoreRecyclerView.setOnPullLoadMoreListener(new PullLoadMoreListener());
+        new PullLoadMoreListener().onRefresh();
     }
 
-    private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener()
-    {
-        //最后一个可见item
-        private int lastVisibleItem;
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy)
-        {
-            super.onScrolled(recyclerView, dx, dy);
-            //查找最后一个可见的item的位置
-            lastVisibleItem = manager.findLastVisibleItemPosition();
-        }
-
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState)
-        {
-            super.onScrollStateChanged(recyclerView, newState);
-            if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == mRVAdapter.getItemCount() && mRVAdapter.isShowFooter())
-            {
-                isRefresh = false;
-                mPresenter.loadDataList(catid, pageIndex);
-            }
-        }
-
-    };
 
     @Override
     public void showProgress()
     {
         //显示刷新进度条
-        mSwipeRefreshLayout.setRefreshing(true);
+        mPullLoadMoreRecyclerView.setRefreshing(true);
     }
 
     @Override
     public void hideProgress()
     {
         //隐藏刷新进度条
-        mSwipeRefreshLayout.setRefreshing(false);
+        mPullLoadMoreRecyclerView.setRefreshing(false);
+        mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
     }
 
     @Override
     public void addListData(List<DataList> lists)
     {
-        mRVAdapter.isShowFooter(true);
-        if (null == mList)
+        if (lists == null || lists.size() <= 0)
         {
-            mList = new ArrayList<>();
-        }
-        if (mList.size() != 0)
-        {
-            mList.clear();
-        }
-        mList.addAll(lists);
-        if (1 == pageIndex)
-        {
-            mRVAdapter.setData(mList);
-            isFirst = true;
+            Toast.makeText(getActivity(), "Not More Data", Toast.LENGTH_SHORT).show();
         } else
         {
-            //如果没有更多数据了,则隐藏footer布局
-            if (lists == null || lists.size() == 0)
-            {
-                mRVAdapter.isShowFooter(false);
-            }
-            mRVAdapter.setData(mList);
-            mRVAdapter.notifyDataSetChanged();
+            mRVAdapter.setData(lists);
         }
         pageIndex += 1;
     }
@@ -157,28 +107,39 @@ public class ListFragment extends Fragment implements DataView, SwipeRefreshLayo
     public void showLoadFailMsg()
     {
         Toast.makeText(getActivity(), "加载数据失败", Toast.LENGTH_SHORT).show();
+        mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
     }
 
-    @Override
-    public void onRefresh()
+    Handler myHandler = new Handler()
     {
-        isRefresh = true;
-        pageIndex = 1;
-        if (mList != null)
+        @Override
+        public void handleMessage(Message msg)
         {
-            mList.clear();
-            mRVAdapter.notifyDataSetChanged();
+            switch (msg.what)
+            {
+                case 1:
+                    mList = CacheManager.readObject(getActivity(), catid + "");
+                    mRVAdapter.setData(mList);
+                    mRVAdapter.notifyDataSetChanged();
+                    break;
+            }
         }
-        mPresenter.loadDataList(catid, pageIndex);
-    }
+    };
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser)
+    class PullLoadMoreListener implements PullLoadMoreRecyclerView.PullLoadMoreListener
     {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && isFirst)
+        @Override
+        public void onRefresh()
         {
-            onRefresh();
+            pageIndex = 1;
+            showProgress();
+            mPresenter.loadDataList(catid, pageIndex);
+        }
+
+        @Override
+        public void onLoadMore()
+        {
+            mPresenter.loadDataList(catid, pageIndex);
         }
     }
 }

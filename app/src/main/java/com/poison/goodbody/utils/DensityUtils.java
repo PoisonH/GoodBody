@@ -3,9 +3,11 @@ package com.poison.goodbody.utils;
 /**
  * * 常用单位转换的辅助类
  * Created by PoisonH on 2016/2/19.
+ *
  */
 
 import android.content.Context;
+import android.support.v4.util.LruCache;
 import android.util.TypedValue;
 
 public class DensityUtils

@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/srl_swiperefreshlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:orientation="vertical">
 
-    <LinearLayout
+    <com.bigkoo.convenientbanner.ConvenientBanner
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cb_banner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="200dp"
+        android:visibility="gone"
+        app:canLoop="true"/>
 
-        <com.bigkoo.convenientbanner.ConvenientBanner
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/cb_banner"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="200dp"
-            app:canLoop="true"/>
+    <com.poison.goodbody.widget.PullLoadMoreRecyclerView
+        android:id="@+id/rv_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
-</android.support.v4.widget.SwipeRefreshLayout>
+    </com.poison.goodbody.widget.PullLoadMoreRecyclerView>
+</LinearLayout>
