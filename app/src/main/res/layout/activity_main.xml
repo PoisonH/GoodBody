@@ -36,6 +36,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="#8b8145"
+            android:clickable="true"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="8dp">
