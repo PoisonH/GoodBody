@@ -2,6 +2,8 @@ package com.poison.goodbody.adapter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.poison.goodbody.R;
 import com.poison.goodbody.bean.DataList;
+import com.poison.goodbody.utils.CacheManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +27,12 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private Context mContext;
     private List<DataList> mList;
 
+    private String mStrFileName;
+
     public ListDataRVAdapter(Context context)
     {
         this.mContext = context;
-        mList=new ArrayList<>();
+        mList = new ArrayList<>();
     }
 
     @Override
@@ -83,5 +88,36 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     {
         mList.addAll(mList.size(), lists);
         this.notifyDataSetChanged();
+
+        Message msg = Message.obtain();
+        msg.what = 0;
+        saveDataHanler.sendMessage(msg);
     }
+
+    public void cleanListData()
+    {
+        if (mList != null || mList.size() >= 0)
+        {
+            mList.clear();
+        }
+    }
+
+    public void setmStrFileName(String mStrFileName)
+    {
+        this.mStrFileName = mStrFileName;
+    }
+
+    Handler saveDataHanler = new Handler()
+    {
+        @Override
+        public void handleMessage(Message msg)
+        {
+            switch (msg.what)
+            {
+                case 0:
+                    CacheManager.saveObject(mContext, mList, mStrFileName);
+                    break;
+            }
+        }
+    };
 }

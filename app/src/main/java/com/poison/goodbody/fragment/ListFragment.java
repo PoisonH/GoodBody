@@ -74,7 +74,6 @@ public class ListFragment extends Fragment implements DataView
         new PullLoadMoreListener().onRefresh();
     }
 
-
     @Override
     public void showProgress()
     {
@@ -99,9 +98,11 @@ public class ListFragment extends Fragment implements DataView
         } else
         {
             mRVAdapter.setData(lists);
+            mRVAdapter.setmStrFileName(catid + "");
         }
         pageIndex += 1;
     }
+
 
     @Override
     public void showLoadFailMsg()
@@ -110,22 +111,6 @@ public class ListFragment extends Fragment implements DataView
         mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
     }
 
-    Handler myHandler = new Handler()
-    {
-        @Override
-        public void handleMessage(Message msg)
-        {
-            switch (msg.what)
-            {
-                case 1:
-                    mList = CacheManager.readObject(getActivity(), catid + "");
-                    mRVAdapter.setData(mList);
-                    mRVAdapter.notifyDataSetChanged();
-                    break;
-            }
-        }
-    };
-
     class PullLoadMoreListener implements PullLoadMoreRecyclerView.PullLoadMoreListener
     {
         @Override
@@ -133,7 +118,16 @@ public class ListFragment extends Fragment implements DataView
         {
             pageIndex = 1;
             showProgress();
-            mPresenter.loadDataList(catid, pageIndex);
+            if (CacheManager.isExistDataCache(getActivity(), getFileName(catid + "")))
+            {
+                Message msg = Message.obtain();
+                msg.what = 0;
+                getDataHandler.sendMessage(msg);
+            } else
+            {
+                mRVAdapter.cleanListData();
+                mPresenter.loadDataList(catid, pageIndex);
+            }
         }
 
         @Override
@@ -141,6 +135,28 @@ public class ListFragment extends Fragment implements DataView
         {
             mPresenter.loadDataList(catid, pageIndex);
         }
+    }
+
+    Handler getDataHandler = new Handler()
+    {
+        @Override
+        public void handleMessage(Message msg)
+        {
+            switch (msg.what)
+            {
+                case 0:
+                    mList = CacheManager.readObject(getActivity(), catid + "");
+                    mRVAdapter.setData(mList);
+                    mRVAdapter.notifyDataSetChanged();
+                    hideProgress();
+                    break;
+            }
+        }
+    };
+
+    private String getFileName(String filename)
+    {
+        return CacheManager.getAppStoragePath(getActivity()) + "/" + filename + "DataList.bat";
     }
 }
 

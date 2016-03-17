@@ -1,16 +1,11 @@
 package com.poison.goodbody.presenter;
 
-import android.content.Context;
-
 import com.poison.goodbody.bean.DataList;
-import com.poison.goodbody.fragment.ListFragment;
 import com.poison.goodbody.model.IListDataModel;
 import com.poison.goodbody.model.ListDataModelImpl;
-import com.poison.goodbody.utils.CacheManager;
 import com.poison.goodbody.utils.Constant;
 import com.poison.goodbody.view.DataView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,7 +36,7 @@ public class PresenterImpl implements IPresenter, ListDataModelImpl.OnLoadDataLi
 
     private String getUrl(int catid, int page)
     {
-        String str = Constant.URL + catid + "&page=" + page + "&pagesize=5";
+        String str = Constant.URL + catid + "&page=" + page + "&pagesize=10";
         return str;
     }
 
