@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <include layout="@layout/common_toolbar_layout" />
+    <include layout="@layout/common_toolbar_layout"/>
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/dl_drawer"
@@ -25,7 +25,7 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/vp_viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"/>
         </LinearLayout>
 
         <!-- 侧滑菜单内容 -->
@@ -36,13 +36,24 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="#8b8145"
+            android:gravity="center"
             android:orientation="vertical"
             android:padding="8dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="测试" />
+                android:text="关于养生"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="关于作者"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="清除缓存"/>
         </LinearLayout>
     </android.support.v4.widget.DrawerLayout>
 </LinearLayout>

@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class ViewPagerAdapter extends FragmentPagerAdapter
 {
-    private final String[] TITLES = {"焦点", "时令", "运动", "人群", "食疗", "中医", "两性"};
+    private final String[] TITLES = {"焦点", "时令", "运动", "人群", "食疗", "中医", "糖尿病"};
     private FragmentManager mFragmentManager = null;
     private Context mContext;
     private ArrayList<DataListEntity> mList;

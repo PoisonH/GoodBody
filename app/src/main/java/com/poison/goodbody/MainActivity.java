@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity
         mList.add(ListFragment.newInstance(Constant.CROWD));
         mList.add(ListFragment.newInstance(Constant.DIET));
         mList.add(ListFragment.newInstance(Constant.DOCTOR));
-        mList.add(ListFragment.newInstance(Constant.BOTHSEXES));
+        mList.add(ListFragment.newInstance(Constant.DIABETES));
 
         mViewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), MainActivity.this.getApplicationContext(), mList));
         mPagerSlidingTabStrip.setViewPager(mViewPager);

@@ -48,7 +48,8 @@ public class GsonUtils
 
                 mDataList.setId(id);
                 mDataList.setTitle(title);
-                mDataList.setDescription(description);
+                String desc = description.replace("&#8203;", "  ");
+                mDataList.setDescription(desc);
                 mDataList.setPicurl(picurl);
                 mDataList.setList_ico(list_ico);
                 mDataList.setPubdate(pubdate);

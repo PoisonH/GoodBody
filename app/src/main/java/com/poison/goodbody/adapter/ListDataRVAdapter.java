@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,13 +28,40 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private Context mContext;
     private List<DataList> mList;
-
     private String mStrFileName;
+    public OnItemClickLitener mOnItemClickLitener;
 
     public ListDataRVAdapter(Context context)
     {
         this.mContext = context;
         mList = new ArrayList<>();
+    }
+
+    public void setOnItemClickLitener(OnItemClickLitener onItemClickLitener)
+    {
+        this.mOnItemClickLitener = onItemClickLitener;
+    }
+
+    /**
+     * RcyclerView的点击事件
+     */
+    public interface OnItemClickLitener
+    {
+        /**
+         * 点击
+         *
+         * @param view
+         * @param position
+         */
+        void onItemClick(View view, int position);
+
+        /**
+         * 长按
+         *
+         * @param view
+         * @param position
+         */
+        void onItemLongClick(View view, int position);
     }
 
     @Override
@@ -42,7 +71,7 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position)
     {
         if (holder instanceof RecyclerHolder)
         {
@@ -54,8 +83,34 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             Uri mPicUri = Uri.parse(mList.get(position).getPicurl());
             ((RecyclerHolder) holder).sdv_imageview.setImageURI(mPicUri);
             ((RecyclerHolder) holder).tv_title.setText(mList.get(position).getTitle());
-            ((RecyclerHolder) holder).tv_description.setText(mList.get(position).getDescription());
+            Spanned txt = Html.fromHtml(mList.get(position).getDescription());
+            ((RecyclerHolder) holder).tv_description.setText(txt);
             ((RecyclerHolder) holder).tv_pubDate.setText(mList.get(position).getPubdate());
+        }
+        /**
+         * 分别设置点击事件的回调
+         */
+        if (mOnItemClickLitener != null)
+        {
+            holder.itemView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    int pos = holder.getPosition();
+                    mOnItemClickLitener.onItemClick(v, pos);
+                }
+            });
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
+            {
+                @Override
+                public boolean onLongClick(View v)
+                {
+                    int pos = holder.getPosition();
+                    mOnItemClickLitener.onItemLongClick(v, pos);
+                    return false;
+                }
+            });
         }
     }
 
@@ -92,6 +147,11 @@ public class ListDataRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         Message msg = Message.obtain();
         msg.what = 0;
         saveDataHanler.sendMessage(msg);
+    }
+
+    public List<DataList> getData()
+    {
+        return mList;
     }
 
     public void cleanListData()

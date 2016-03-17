@@ -36,7 +36,7 @@ public class PresenterImpl implements IPresenter, ListDataModelImpl.OnLoadDataLi
 
     private String getUrl(int catid, int page)
     {
-        String str = Constant.URL + catid + "&page=" + page + "&pagesize=10";
+        String str = Constant.URL + catid + "&page=" + page + "&pagesize=" + Constant.PAGESIZE;
         return str;
     }
 
